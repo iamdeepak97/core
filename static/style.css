@@ -1,0 +1,36 @@
+body{
+    margin: 0%;
+    padding: 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.table{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border: 2px solid black;
+    
+}
+.ss{
+    align-items: center;
+    display: flex;
+    justify-content:center;
+    
+    padding: 10px;
+
+}
+.sea{
+    width: 30%;
+    padding-left: 7px;
+    border: solid 5px;
+    border-radius: 5px;
+    background-color: transparent   
+}
+.s{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri'Courier New', Courier, monospace;
+    font-weight: 800;
+}
+.btn{
+    margin-top: 10px;
+    margin-left: 15px;
+}
