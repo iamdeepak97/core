@@ -3,9 +3,11 @@ from recipebook.models import recipes
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import authenticate ,login,logout
+from django.contrib.auth.decorators import login_required
 # Create your views here
+@login_required(login_url="/signup/")
 def recipe(request):
-    
     if request.method=="POST":
         data=request.POST
         title=data.get("title")
@@ -14,8 +16,7 @@ def recipe(request):
         time=data.get("created_at")
         
         recipes.objects.create(title=title,description=description,image=recipe_image,created_at=time)
-        
-        return redirect('/')
+        return redirect('/recipe/')
     queryset=recipes.objects.all()
     if request.GET.get('search'):
         
@@ -25,11 +26,12 @@ def recipe(request):
     context={'recipe':queryset}
     return render(request,"index.html",context)
 
+@login_required(login_url="/signup/")
 def delete(request,id):
     queryset=recipes.objects.get(id = id)
     queryset.delete()
-    return redirect('/')
-
+    return redirect('/recipe/')
+@login_required(login_url="/signup/")
 def update(request,id):
     queryset=recipes.objects.get(id = id)
     if request.method=="POST":
@@ -43,7 +45,7 @@ def update(request,id):
         if recipe_image:
             queryset.image=recipe_image
         queryset.save()
-        return redirect('/')
+        return redirect('/recipe/')
     context={'a':queryset}
     
     return render(request,"update.html",context)
@@ -63,5 +65,30 @@ def signup(request):
         data=User.objects.create(username=name,email=email)
         data.set_password(password)
         data.save()
-        return redirect("/recipe/")
+        messages.error(request,'account create successfully')
+        return redirect("/")
     return render(request,'signup.html')
+
+def login_page(request):
+    if request.method =="POST":
+        username= request.POST.get('username')
+        password=request.POST.get('password')
+        
+        if not User.objects.filter(username=username).exists():
+            messages.error(request,"username doesn't not exist create account first!")
+            return redirect('/login/')
+        
+        user = authenticate(username=username,password=password)
+        
+        if user is None:
+            messages.error(request,"invalid password")
+            return redirect('/login/')
+        else:
+            login(request,user)
+            return redirect('/recipe/')
+    
+    return render(request,"login.html")
+
+def logout_page(request):
+    logout(request)
+    return redirect('/login/')
