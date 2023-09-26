@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from recipebook.models import recipes
 from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.contrib import messages
 # Create your views here
 def recipe(request):
     
@@ -45,4 +47,21 @@ def update(request,id):
     context={'a':queryset}
     
     return render(request,"update.html",context)
-    
+
+def signup(request):
+    if request.method=="POST":
+       
+        name=request.POST.get("username")
+        email=request.POST.get("email")
+        password=request.POST.get("password")
+        
+        user=User.objects.filter(username=name)
+        messages.info(request,"username already taken")
+        if user.exists():
+            return redirect('/signup/')
+            
+        data=User.objects.create(username=name,email=email)
+        data.set_password(password)
+        data.save()
+        return redirect("/recipe/")
+    return render(request,'signup.html')

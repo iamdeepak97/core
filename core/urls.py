@@ -24,9 +24,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', recipe),
+    path('', signup),
     path('delete/<id>/',delete, name='delete'),
-    path('update/<id>/',update, name='update')
+    path('update/<id>/',update, name='update'),
+    path('signup/',signup,name='signup'),
+    path('recipe/',recipe)
 ]
 
 if settings.DEBUG:
