@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate ,login,logout
 from django.contrib.auth.decorators import login_required
 # Create your views here
-@login_required(login_url="/signup/")
+@login_required(login_url="/login/")
 def recipe(request):
     if request.method=="POST":
         data=request.POST
@@ -26,12 +26,12 @@ def recipe(request):
     context={'recipe':queryset}
     return render(request,"index.html",context)
 
-@login_required(login_url="/signup/")
+@login_required(login_url="/login/")
 def delete(request,id):
     queryset=recipes.objects.get(id = id)
     queryset.delete()
     return redirect('/recipe/')
-@login_required(login_url="/signup/")
+@login_required(login_url="/login/")
 def update(request,id):
     queryset=recipes.objects.get(id = id)
     if request.method=="POST":
